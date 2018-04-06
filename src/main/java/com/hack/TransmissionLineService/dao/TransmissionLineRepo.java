@@ -16,11 +16,11 @@
 
 package com.hack.TransmissionLineService.dao;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hack.TransmissionLineService.domain.TransmissionLine;
 
-public interface TransmissionLineRepo extends Repository<TransmissionLine, Long> {
+public interface TransmissionLineRepo extends JpaRepository<TransmissionLine, Long> {
 
 	TransmissionLine findByName(String name);
 

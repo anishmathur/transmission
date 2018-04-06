@@ -17,9 +17,17 @@ package com.hack.TransmissionLineService.web;
 
 
 
+import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,28 +35,127 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hack.TransmissionLineService.Event;
+import com.hack.TransmissionLineService.PoolPrice;
+import com.hack.TransmissionLineService.SMP;
 import com.hack.TransmissionLineService.domain.Generation;
+import com.hack.TransmissionLineService.domain.TransmissionLine;
+import com.hack.TransmissionLineService.service.EventService;
+import com.hack.TransmissionLineService.service.SMPAndPoolPriceService;
 import com.hack.TransmissionLineService.service.TransmissionLineService;
 
 @RestController
-@RequestMapping(value="/lines")
 public class SampleController {
-
+	
+	@Autowired
+	EventService eventService;
+	
+	@Autowired
+	SMPAndPoolPriceService smpAndPoolPriceService;
+	
+	//Just gets the line name
 	@Autowired
 	private TransmissionLineService transmissionLineService;
-	@RequestMapping(value="/{line}", method=RequestMethod.GET)
+	@RequestMapping(value="/lines/{line}", method=RequestMethod.GET)
 	@ResponseBody
 	@Transactional(readOnly = true)
 	public String transmissionLineName(@PathVariable String line) {
 		//TestLine1
-		return transmissionLineService.getTransmissionLine(line).getName();
+		return transmissionLineService.getTransmissionLine(line).toString();
 	}
 
-	@RequestMapping(value="/{line}/generations", method=RequestMethod.GET)
+	//get the generation levels
+	@RequestMapping(value="/lines/{line}/generations", method=RequestMethod.GET)
 	@ResponseBody
 	@Transactional(readOnly = true)
 	public Set<Generation> generationLevelsforLine(@PathVariable String line) {
 		//TestLine1
+		//return transmissionLineService.getTransmissionLine(line).getGenerations().stream().map(generation -> generation.toString()).collect(Collectors.toSet());
 		return transmissionLineService.getTransmissionLine(line).getGenerations();
 	}
+
+	//get the generating unit level
+	@RequestMapping(value="/lines/{line}/{generationUnit}", method=RequestMethod.GET)
+	@ResponseBody
+	@Transactional(readOnly = true)
+	public int generationLevelsforLineandGenUnit(@PathVariable String line, @PathVariable String generationUnit) {
+		Optional<Generation> gen = transmissionLineService.getTransmissionLine(line).getGenerations().stream().filter(unit -> unit.getName().equals(generationUnit)).findFirst();
+		if(gen.isPresent()){
+			return gen.get().getGenerationLevel().intValue();
+		} else {
+			return BigDecimal.ZERO.intValue();
+		}
+	}
+	
+	//update the line capacity
+	@RequestMapping(value = "/lines/{line}/update", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public @ResponseBody ResponseEntity<TransmissionLine> update( TransmissionLine transmissionLine) {
+		System.out.println("Inside updateCapacityPage**** ");
+		transmissionLineService.updateCapacity(transmissionLine.getName(), transmissionLine.getCapacity());
+	    // TODO: call persistence layer to update
+	    return new ResponseEntity<TransmissionLine>(transmissionLineService.getTransmissionLine(transmissionLine.getName()), HttpStatus.OK);
+	}
+	
+	//update the generation level
+	@RequestMapping(value = "/lines/generation/update", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public @ResponseBody ResponseEntity<TransmissionLine> update(String line, Generation generation) {
+		System.out.println("Inside updateCapacityPage**** ");
+		transmissionLineService.updateLevelGeneration(generation.getName(), line, generation.getGenerationLevel());
+	    // TODO: call persistence layer to update
+	    return new ResponseEntity<TransmissionLine>(transmissionLineService.getTransmissionLine(line), HttpStatus.OK);
+	}
+	
+	//get action
+	@RequestMapping(value="/action", method=RequestMethod.GET)
+	@Produces({MediaType.APPLICATION_JSON})
+	@Transactional(readOnly = true)
+	public Event getAction() {
+		return eventService.getEvent();
+	}
+	
+	//post action
+	@RequestMapping(value = "/action/fire", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	public @ResponseBody void postAction(Event event) {
+		eventService.addEvent(event);
+	}
+	
+	
+	//get action for SMP
+	@RequestMapping(value="/smp", method=RequestMethod.GET)
+	@Produces({MediaType.APPLICATION_JSON})
+	@Transactional(readOnly = true)
+	public SMP getSMP() {
+		return smpAndPoolPriceService.getSMP();
+	}
+	
+	//post action for SMP
+	@RequestMapping(value = "/smp/update", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public @ResponseBody void postAction(SMP smp) {
+		smpAndPoolPriceService.setCurrentSMP(smp.getCurrentSMP());
+	}
+	
+	//get action for pool price
+	@RequestMapping(value="/poolprice", method=RequestMethod.GET)
+	@Produces({MediaType.APPLICATION_JSON})
+	@Transactional(readOnly = true)
+	public PoolPrice getPoolPrice() {
+		return smpAndPoolPriceService.getPoolPrice();
+	}
+	
+	//post action for pool price
+	@RequestMapping(value = "/poolprice/update", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public @ResponseBody PoolPrice postAction(PoolPrice poolPrice) {
+		smpAndPoolPriceService.setCurrentPoolPrice(poolPrice.getCurrentpoolPrice());
+		return smpAndPoolPriceService.getPoolPrice();
+	}
+	
 }

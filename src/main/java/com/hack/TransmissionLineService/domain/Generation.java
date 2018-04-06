@@ -27,6 +27,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Generation implements Serializable {
 
@@ -54,6 +56,7 @@ public class Generation implements Serializable {
 		this.generationLevel = generationLevel;
 	}
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="transmissionLine_id", nullable=false)
 	private TransmissionLine transmissionLine;

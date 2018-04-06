@@ -42,6 +42,9 @@ public class TransmissionLine implements Serializable {
 
 	@Column(nullable = false)
 	private String name;
+	
+	@Column(nullable = false)
+	private Integer capacity;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "transmissionLine")
 	private Set<Generation> generations;
@@ -77,9 +80,18 @@ public class TransmissionLine implements Serializable {
 		this.name = name;
 	}
 
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
 	@Override
 	public String toString() {
-		return "TransmissionLine [id=" + id + ", name=" + name + "]";
+		return "TransmissionLine [id=" + id + ", name=" + name + ", capacity=" + capacity + ", generations="
+				+ generations + "]";
 	}
 
 }

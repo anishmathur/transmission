@@ -6,6 +6,6 @@
 -- AUSTRALIA
 
 -- Brisbane
-insert into transmission_line(name) values ('TestLine1')
+insert into transmission_line(name,capacity) values ('TestLine1',50)
 insert into generation(name, generation_level, transmission_line_id) values ('KH1', 10.0, 1)
 insert into generation(name, generation_level, transmission_line_id) values ('KH2', 20.0, 1)
