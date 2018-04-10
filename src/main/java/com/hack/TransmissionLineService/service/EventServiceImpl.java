@@ -4,35 +4,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hack.TransmissionLineService.Action;
-import com.hack.TransmissionLineService.Event;
+import com.hack.TransmissionLineService.DialogFlowEvent;
+import com.hack.TransmissionLineService.RPAEvent;
 @Service
 public class EventServiceImpl implements EventService{
 
 	@Autowired
-	Event event;
+	DialogFlowEvent dialogFlowEvent;
+	
+	@Autowired
+	RPAEvent rpaEvent;
 	
 	@Override
-	public Event getEvent() {
-		Event newEvent = null;
-		if(event.getAction()!=null){
-			newEvent = new Event(event.getAction(),event.getItem() );
-			event.setAction(Action.NO_PENDING_ACTION);
-			event.setItem("TestLine223");
+	public DialogFlowEvent getDialogFlowEvent() {
+		DialogFlowEvent newEvent = null;
+		if(dialogFlowEvent.getAction()!=null){
+			newEvent = new DialogFlowEvent(dialogFlowEvent.getAction(),dialogFlowEvent.getItem() );
+			dialogFlowEvent.setAction(Action.NO_PENDING_ACTION);
+			dialogFlowEvent.setItem("TestLine1");
 		}else{
-			newEvent = new Event(Action.NO_PENDING_ACTION,"TestLine22");
+			newEvent = new DialogFlowEvent(Action.NO_PENDING_ACTION,"TestLine1");
 		}
 		return newEvent;
 	}
 
 	@Override
-	public void addEvent(Action action, String item) {
-		event.setAction(action);
-		event.setItem(item);
+	public void addDialogFlowEvent(Action action, String item) {
+		dialogFlowEvent = new DialogFlowEvent();
+		dialogFlowEvent.setAction(action);
+		dialogFlowEvent.setItem(item);
 	}
 	
 	@Override
-	public void addEvent(Event event) {
-		this.event = event;
+	public void addDialogFlowEvent(DialogFlowEvent event) {
+		this.dialogFlowEvent = event;
+	}
+	
+	
+	@Override
+	public RPAEvent getRPAEvent() {
+		RPAEvent newEvent = null;
+		if(rpaEvent.getAction()!=null){
+			newEvent = new RPAEvent(rpaEvent.getAction(),rpaEvent.getItem() );
+			rpaEvent.setAction(Action.NO_PENDING_ACTION);
+			rpaEvent.setItem("TestLine223");
+		}else{
+			newEvent = new RPAEvent(Action.NO_PENDING_ACTION,"TestLine22");
+		}
+		return newEvent;
+	}
+
+	@Override
+	public void addRPAEvent(Action action, String item) {
+		rpaEvent  = new RPAEvent();
+		rpaEvent.setAction(action);
+		rpaEvent.setItem(item);
+	}
+	
+	@Override
+	public void addRPAEvent(RPAEvent event) {
+		this.rpaEvent = event;
 	}
 
 }

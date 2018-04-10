@@ -35,8 +35,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hack.TransmissionLineService.DialogFlowEvent;
 import com.hack.TransmissionLineService.Event;
 import com.hack.TransmissionLineService.PoolPrice;
+import com.hack.TransmissionLineService.RPAEvent;
 import com.hack.TransmissionLineService.SMP;
 import com.hack.TransmissionLineService.domain.Generation;
 import com.hack.TransmissionLineService.domain.TransmissionLine;
@@ -58,10 +60,11 @@ public class SampleController {
 	private TransmissionLineService transmissionLineService;
 	@RequestMapping(value="/lines/{line}", method=RequestMethod.GET)
 	@ResponseBody
+	@Produces({MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public String transmissionLineName(@PathVariable String line) {
+	public TransmissionLine transmissionLineName(@PathVariable String line) {
 		//TestLine1
-		return transmissionLineService.getTransmissionLine(line).toString();
+		return transmissionLineService.getTransmissionLine(line);
 	}
 
 	//get the generation levels
@@ -110,18 +113,33 @@ public class SampleController {
 	}
 	
 	//get action
-	@RequestMapping(value="/action", method=RequestMethod.GET)
+	@RequestMapping(value="/action/dialogflow", method=RequestMethod.GET)
 	@Produces({MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Event getAction() {
-		return eventService.getEvent();
+	public DialogFlowEvent getAction() {
+		return eventService.getDialogFlowEvent();
 	}
 	
 	//post action
-	@RequestMapping(value = "/action/fire", method = RequestMethod.POST)
+	@RequestMapping(value = "/action/dialogflow/fire", method = RequestMethod.POST)
     @Consumes({MediaType.APPLICATION_JSON})
-	public @ResponseBody void postAction(Event event) {
-		eventService.addEvent(event);
+	public @ResponseBody void postAction(DialogFlowEvent event) {
+		eventService.addDialogFlowEvent(event);
+	}
+	
+	//get action
+	@RequestMapping(value="/action/rpa", method=RequestMethod.GET)
+	@Produces({MediaType.APPLICATION_JSON})
+	@Transactional(readOnly = true)
+	public RPAEvent getRPAAction() {
+		return eventService.getRPAEvent();
+	}
+	
+	//post action
+	@RequestMapping(value = "/action/rpa/fire", method = RequestMethod.POST)
+    @Consumes({MediaType.APPLICATION_JSON})
+	public @ResponseBody void postAction(RPAEvent event) {
+		eventService.addRPAEvent(event);
 	}
 	
 	

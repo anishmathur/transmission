@@ -1,11 +1,20 @@
 package com.hack.TransmissionLineService.service;
 
 import com.hack.TransmissionLineService.Action;
-import com.hack.TransmissionLineService.Event;
+import com.hack.TransmissionLineService.DialogFlowEvent;
+import com.hack.TransmissionLineService.RPAEvent;
 
 public interface EventService {
-	public Event getEvent();
 
-	public void addEvent(Action action, String item);
-	public void addEvent(Event event);
+	DialogFlowEvent getDialogFlowEvent();
+
+	void addDialogFlowEvent(Action action, String item);
+
+	void addDialogFlowEvent(DialogFlowEvent event);
+
+	RPAEvent getRPAEvent();
+
+	void addRPAEvent(Action action, String item);
+
+	void addRPAEvent(RPAEvent event);
 }

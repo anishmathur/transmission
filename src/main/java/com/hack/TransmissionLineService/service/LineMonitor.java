@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hack.TransmissionLineService.Action;
+import com.hack.TransmissionLineService.DialogFlowEvent;
 import com.hack.TransmissionLineService.Event;
 import com.hack.TransmissionLineService.domain.TransmissionLine;
 
@@ -26,7 +27,7 @@ public class LineMonitor {
     TransmissionLineService transmissionLineService;
     
     @Autowired
-    Event event;
+    DialogFlowEvent event;
 
     //@Scheduled(fixedRate = 20000)
     public void checkLineCapacity() {
