@@ -57,4 +57,9 @@ public class TransmissionLineServiceImpl implements TransmissionLineService {
 		lineMonitor.checkLineCapacity();
 		return this.getTransmissionLine(line);
 	}
+	
+	@Override
+	public String checkAllLines() {
+		return lineMonitor.checkLineStatus();
+	}
 }

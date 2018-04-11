@@ -140,7 +140,11 @@ public class SampleController {
 	public @ResponseBody void postRPAAction(@PathVariable String action) {
 		eventService.addRPAEvent(new RPAEvent(Action.valueOf(action),""));
 	}
-	
+
+	@RequestMapping(value = "/action/cheklines", method = RequestMethod.GET)
+	public @ResponseBody String checklines() {
+		return transmissionLineService.checkAllLines();
+	}
 	
 	//get action for SMP
 	@RequestMapping(value="/smp", method=RequestMethod.GET)

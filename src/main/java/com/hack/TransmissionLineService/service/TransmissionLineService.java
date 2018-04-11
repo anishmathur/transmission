@@ -19,4 +19,6 @@ public interface TransmissionLineService {
 	Generation getGenerationByName(String generationName, String transmissionLineName);
 
 	TransmissionLine updateLevelGeneration(String generationName, String transmissionLineName, BigDecimal capacity);
+
+	String checkAllLines();
 }

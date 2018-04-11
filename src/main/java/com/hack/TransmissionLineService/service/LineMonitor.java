@@ -49,4 +49,24 @@ public class LineMonitor {
 	private int getTotalGenForLine(TransmissionLine line) {		
 		return line.getGenerations().stream().mapToInt(gen -> gen.getGenerationLevel().intValue()).sum(); 
 	}
+	
+    public String checkLineStatus() {
+        log.info("The time is now {}", dateFormat.format(new Date()));
+        final StringBuilder builder = new StringBuilder();
+        transmissionLineService.getAllTransmissionLines().stream().forEach(line -> builder.append(monitorLine(line)));
+        return builder.toString();
+    }
+	private String monitorLine(TransmissionLine line) {
+		int capacity = line.getCapacity().intValue();
+		int totalGen = getTotalGenForLine(line);
+		log.info("totalGen={}, capacity={}",totalGen, capacity);
+		String status = "";
+		if(totalGen > capacity){			
+			status = "Flow on the line "+line.getName()+" exceeds the line capacity by "+(totalGen - capacity)+" MW. ";
+		}
+		else {
+			status = "Flow on the line "+line.getName()+" is normal, current capacity is "+capacity+" current flow is  "+totalGen+" MW. ";
+		}
+		return status;
+	}
 }
