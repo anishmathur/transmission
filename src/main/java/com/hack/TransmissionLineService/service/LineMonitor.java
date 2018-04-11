@@ -62,10 +62,10 @@ public class LineMonitor {
 		log.info("totalGen={}, capacity={}",totalGen, capacity);
 		String status = "";
 		if(totalGen > capacity){			
-			status = "Flow on the line "+line.getName()+" exceeds the line capacity by "+(totalGen - capacity)+" MW. ";
+			status = "Flow on the line "+line.getName()+" exceeds the line capacity by "+(totalGen - capacity)+" MW. A constraint of "+(totalGen - capacity)+" MW is recommended";
 		}
 		else {
-			status = "Flow on the line "+line.getName()+" is normal, current capacity is "+capacity+" current flow is  "+totalGen+" MW. ";
+			status = "Flow on the line "+line.getName()+" is normal, current capacity is "+capacity+" MW, current flow is  "+totalGen+" MW. ";
 		}
 		return status;
 	}
