@@ -47,9 +47,9 @@ public class EventServiceImpl implements EventService{
 		if(rpaEvent.getAction()!=null){
 			newEvent = new RPAEvent(rpaEvent.getAction(),rpaEvent.getItem() );
 			rpaEvent.setAction(Action.NO_PENDING_ACTION);
-			rpaEvent.setItem("TestLine223");
+			rpaEvent.setItem("TestLine1");
 		}else{
-			newEvent = new RPAEvent(Action.NO_PENDING_ACTION,"TestLine22");
+			newEvent = new RPAEvent(Action.NO_PENDING_ACTION,"TestLine1");
 		}
 		return newEvent;
 	}

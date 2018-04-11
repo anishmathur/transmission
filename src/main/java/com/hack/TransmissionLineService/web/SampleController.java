@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hack.TransmissionLineService.Action;
 import com.hack.TransmissionLineService.DialogFlowEvent;
 import com.hack.TransmissionLineService.Event;
 import com.hack.TransmissionLineService.PoolPrice;
@@ -121,10 +122,9 @@ public class SampleController {
 	}
 	
 	//post action
-	@RequestMapping(value = "/action/dialogflow/fire", method = RequestMethod.POST)
-    @Consumes({MediaType.APPLICATION_JSON})
-	public @ResponseBody void postAction(DialogFlowEvent event) {
-		eventService.addDialogFlowEvent(event);
+	@RequestMapping(value = "/action/dialogflow/fire/{action}", method = RequestMethod.GET)
+	public @ResponseBody void postDialoFlowAction(@PathVariable String action) {
+		eventService.addDialogFlowEvent(new DialogFlowEvent(Action.valueOf(action),""));
 	}
 	
 	//get action
@@ -136,10 +136,9 @@ public class SampleController {
 	}
 	
 	//post action
-	@RequestMapping(value = "/action/rpa/fire", method = RequestMethod.POST)
-    @Consumes({MediaType.APPLICATION_JSON})
-	public @ResponseBody void postAction(RPAEvent event) {
-		eventService.addRPAEvent(event);
+	@RequestMapping(value = "/action/rpa/fire/{action}", method = RequestMethod.GET)
+	public @ResponseBody void postRPAAction(@PathVariable String action) {
+		eventService.addRPAEvent(new RPAEvent(Action.valueOf(action),""));
 	}
 	
 	
