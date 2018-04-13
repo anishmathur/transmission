@@ -92,14 +92,14 @@ public class SampleController {
 	}
 	
 	//update the line capacity
-	@RequestMapping(value = "/lines/{line}/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/lines/{line}/update/{capacity}", method = RequestMethod.POST)
     @Consumes({MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON})
-	public @ResponseBody ResponseEntity<TransmissionLine> update( TransmissionLine transmissionLine) {
+	public @ResponseBody ResponseEntity<TransmissionLine> update(@PathVariable String line, @PathVariable String capacity) {
 		System.out.println("Inside updateCapacityPage**** ");
-		transmissionLineService.updateCapacity(transmissionLine.getName(), transmissionLine.getCapacity());
+		transmissionLineService.updateCapacity(line, Integer.valueOf(capacity));
 	    // TODO: call persistence layer to update
-	    return new ResponseEntity<TransmissionLine>(transmissionLineService.getTransmissionLine(transmissionLine.getName()), HttpStatus.OK);
+	    return new ResponseEntity<TransmissionLine>(transmissionLineService.getTransmissionLine(line), HttpStatus.OK);
 	}
 	
 	//update the generation level
