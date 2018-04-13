@@ -6,8 +6,8 @@
 -- AUSTRALIA
 
 -- Brisbane
-insert into transmission_line(name,capacity) values ('Northern',150)
-insert into generation(name, generation_level, transmission_line_id) values ('KH1', 50.0, 1)
-insert into generation(name, generation_level, transmission_line_id) values ('KH2', 50.0, 1)
 insert into transmission_line(name,capacity) values ('Southern',100)
-insert into generation(name, generation_level, transmission_line_id) values ('SD1', 20.0, 2)
+insert into generation(name, generation_level, transmission_line_id) values ('SD1', 20.0, 1)
+insert into transmission_line(name,capacity) values ('Northern',90)
+insert into generation(name, generation_level, transmission_line_id) values ('KH1', 60.0, 2)
+insert into generation(name, generation_level, transmission_line_id) values ('KH2', 40.0, 2)
